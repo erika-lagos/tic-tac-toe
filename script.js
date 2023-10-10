@@ -109,9 +109,9 @@ function init() {
             let message;
             const winner = gameBoard.getWinner();
             if (winner) {
-                message = `Game Over! ${winner.name} wins. Click 'New Game' to play again.`;
+                message = `Game Over! ${winner.name} wins.`;
             } else if (gameBoard.isGameOver()) {
-                message = `Game Over! No more moves available. Click 'New Game' to play again.`;
+                message = `Game Over! No more moves available.`;
             } else {
                 message = `${gameBoard.getActivePlayer().name}'s turn`;
             }
