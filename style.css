@@ -1,0 +1,28 @@
+body {
+    display: grid;
+    justify-content: center;
+    gap: 80px;
+}
+
+.header {
+    text-align: center;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.gameboard {
+    display: grid;
+    justify-content: center;
+    grid-template: 50px 50px 50px / 50px 50px 50px;
+}
+
+.cell {
+    border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
