@@ -89,11 +89,12 @@ function init() {
         const _gameboardElement = document.querySelector('.gameboard');
         const _newGameButton = document.querySelector('.new-game');
         const _userMessage = document.querySelector('.message');
+        let _isActive = true;
         
         function addListeners() {
            _gameboardElement.addEventListener('click', evt => {
                 const cell = evt.target.closest('.cell');
-                if (cell.textContent !== '') {
+                if (cell.textContent !== '' || !_isActive) {
                     return;
                 }        
                 const index = cell.dataset.index;
@@ -108,10 +109,13 @@ function init() {
         function render() {
             let message;
             const winner = gameBoard.getWinner();
+            _gameboardElement.classList.remove('inactive');
             if (winner) {
                 message = `Game Over! ${winner.name} wins.`;
+                stopGame();
             } else if (gameBoard.isGameOver()) {
                 message = `Game Over! No more moves available.`;
+                stopGame();
             } else {
                 message = `${gameBoard.getActivePlayer().name}'s turn`;
             }
@@ -123,9 +127,15 @@ function init() {
            })
         } 
 
+        function stopGame() {
+            _isActive = false;
+            _gameboardElement.classList.add('inactive');
+        }
+
         return {
          addListeners,
          render,
+         stopGame,
         }
     })();
 

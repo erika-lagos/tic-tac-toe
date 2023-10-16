@@ -34,6 +34,11 @@ body {
     justify-content: center;
 }
 
+.inactive {
+    color: gray;
+    opacity: 0.5;
+}
+
 button {
     background-color: rgb(9, 92, 9);
     color: white;
