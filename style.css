@@ -5,6 +5,12 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
 .header {
     text-align: center;
     font-size: 24pt;
@@ -38,6 +44,23 @@ body {
     color: gray;
     opacity: 0.5;
 }
+
+.new-game-modal[open] {
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 65px;
+}
+
+.modal-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    column-gap: 30px;
+    justify-items: end;
+}
+
 
 button {
     background-color: rgb(9, 92, 9);

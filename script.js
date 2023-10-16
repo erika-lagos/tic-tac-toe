@@ -1,46 +1,32 @@
-let player1;
-let player2;
-let gameBoard;
-let displayController;
+function createPlayer(name, symbol) {
+    return {name, symbol};
+}
 
-init();
+const game = (function() {
 
-function init() {
+    let player1, player2, activePlayer;
+    let winner = null;
 
-    player1 = createPlayer('Player 1', 'X');
-    player2 = createPlayer('Player 2', 'O');
-
-    gameBoard = (function(player1, player2) {
-      
-        const _player1 = player1;
-        const _player2 = player2;
-        let _activePlayer = _player1;
-        const _game = new Array(9).fill(null);
-
-        function switchActivePlayer() {
-            if (_activePlayer === _player1) {
-                _activePlayer = _player2;
-            } else {
-                _activePlayer = _player1;
-            }
+    function switchActivePlayer() {
+        if (activePlayer === player1) {
+            activePlayer = player2;
+        } else {
+            activePlayer = player1;
         }
+    }
+
+    function startGame() {
+        [player1, player2] = displayController.getPlayers();
+        activePlayer = player1;
+        winner = null;
+        gameBoard.clear();
+        displayController.newGame();
+    }
+    
+    const gameBoard = (function() {
         
-        function getActivePlayer() {
-            return _activePlayer;
-        }
-        
-        function addPlay(index) {
-            if (_game[index]) {
-                alert('No Plays available in that space');
-                return;
-            }
-            _game[index] = _activePlayer;
-        }
-
-        function getPlay(index) {
-            return _game[index];
-        }
-        
+        let _game = new Array(9).fill(null);
+    
         function getWinner() {
             if (_game[0] && _game[0] === _game[1] && _game[0] === _game[2]) {
                 return _game[0];
@@ -72,80 +58,119 @@ function init() {
         function isGameOver() {
             return _game.every(play => play);
         }
+    
+        function addPlay(index, player) {
+            if (_game[index]) {
+                alert('No Plays available in that space');
+                return;
+            }
+            _game[index] = player;
+        }
+    
+        function getPlay(index) {
+            return _game[index];
+        }
+
+        function clear() {
+            _game = new Array(9).fill(null);
+        }
         
         return {
-            switchActivePlayer,
-            getActivePlayer,
             addPlay,
             getPlay,
             getWinner,
             isGameOver,
+            clear,
         }
+    
+    })();
 
-    })(player1, player2);
+    const displayController = (function() {
 
-    displayController = (function() {
+        const _newGameModal = document.querySelector('.new-game-modal');
+        const _startGameButton = document.querySelector('.start-game-button');
         const _cellElements = document.querySelectorAll('.cell');
         const _gameboardElement = document.querySelector('.gameboard');
         const _newGameButton = document.querySelector('.new-game');
         const _userMessage = document.querySelector('.message');
         let _isActive = true;
         
-        function addListeners() {
-           _gameboardElement.addEventListener('click', evt => {
-                const cell = evt.target.closest('.cell');
-                if (cell.textContent !== '' || !_isActive) {
-                    return;
-                }        
-                const index = cell.dataset.index;
-                gameBoard.addPlay(index);
-                gameBoard.switchActivePlayer();
-                render();
-           });
-
-           _newGameButton.addEventListener('click', init);
+        function bindEvents() {
+            _startGameButton.addEventListener('click', startGame);
+            _gameboardElement.addEventListener('click', attemptPlay);
+            _newGameButton.addEventListener('click', showWelcome);
         }
-
+    
+        function attemptPlay(event) {
+            const cell = event.target.closest('.cell');
+            if (cell.textContent !== '' || !_isActive) {
+                return;
+            }        
+            const index = cell.dataset.index;
+            gameBoard.addPlay(index, activePlayer);
+            switchActivePlayer();
+            winner = gameBoard.getWinner();
+            if(winner || gameBoard.isGameOver()) {
+                stopGame();
+            }
+            render();
+        }
+    
         function render() {
             let message;
-            const winner = gameBoard.getWinner();
-            _gameboardElement.classList.remove('inactive');
             if (winner) {
                 message = `Game Over! ${winner.name} wins.`;
-                stopGame();
             } else if (gameBoard.isGameOver()) {
                 message = `Game Over! No more moves available.`;
-                stopGame();
             } else {
-                message = `${gameBoard.getActivePlayer().name}'s turn`;
+                message = `${activePlayer.name}'s turn`;
             }
             _userMessage.textContent = message;
-
            _cellElements.forEach((cell, index) => {
                 const symbol = gameBoard.getPlay(index)?.symbol;
                 cell.textContent = symbol;
            })
         } 
-
+    
         function stopGame() {
             _isActive = false;
             _gameboardElement.classList.add('inactive');
         }
-
+    
+        function showWelcome() {
+            _newGameModal.showModal();
+        }
+    
+        function newGame() {
+            _isActive = true;
+            _gameboardElement.classList.remove('inactive');
+            _newGameModal.close();
+            render();
+        }
+    
+        function getPlayers() {
+            const p1Name = _newGameModal.querySelector('#player1-name').value;
+            const p1Symbol = _newGameModal.querySelector('#player1-symbol').value;
+            const p2Name = _newGameModal.querySelector('#player2-name').value;
+            const p2Symbol = _newGameModal.querySelector('#player2-symbol').value;
+            const player1 = createPlayer(p1Name, p1Symbol);
+            const player2 = createPlayer(p2Name, p2Symbol);
+            return [player1, player2];
+        }
+    
         return {
-         addListeners,
-         render,
-         stopGame,
+         bindEvents,
+         showWelcome,
+         getPlayers,
+         newGame,
         }
     })();
 
-    displayController.addListeners();
-    displayController.render();
-}
+    displayController.bindEvents();
+    displayController.showWelcome();
 
 
-function createPlayer(name, symbol) {
-    return {name, symbol};
-}
+})();
+
 
 

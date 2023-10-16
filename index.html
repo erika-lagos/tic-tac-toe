@@ -26,17 +26,29 @@
         </div>
         <button class="new-game">New Game</button>
     </div>
-    <dialog class="new-game">
-        <label for="player1-name">Player 1 Name:</label>
-        <input type="text" id="player1-name" name="player1-name">
-        <label for="player1-symbol">Player 1 Symbol:</label>
-        <input type="text" id="player1-symbol" name="player1-symbol">
-        <label for="player2-name">Player 2 Name:</label>
-        <input type="text" id="player2-name" name="player2-name">
-        <label for="player2-symbol">Player 2 Symbol:</label>
-        <input type="text" id="player2-symbol" name="player2-symbol">
-        <button>Play Tic Tac Toe!</button>
-        <button>Cancel</button>
+    <dialog class="new-game-modal">
+        <div class="header">Welcome! Select your weapons!</div>
+        <ul class="modal-inputs">
+            <li>
+                <label for="player1-name">Player 1 Name:</label>
+                <input type="text" id="player1-name" name="player1-name">
+            </li>
+            <li>
+                <label for="player2-name">Player 2 Name:</label>
+                <input type="text" id="player2-name" name="player2-name">
+            </li>
+            <li>
+                <label for="player1-symbol">Player 1 Weapon:</label>
+                <input type="text" id="player1-symbol" name="player1-symbol">
+            </li>
+            <li>
+                <label for="player2-symbol">Player 2 Weapon:</label>
+                <input type="text" id="player2-symbol" name="player2-symbol">
+            </li>
+        </ul>
+        <div class="modal-buttons">
+            <button class="start-game-button">Play Tic Tac Toe!</button>
+        </div>
     </dialog>
 </body>
 </html>
